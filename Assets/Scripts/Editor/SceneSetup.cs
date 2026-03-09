@@ -19,6 +19,9 @@ public static class SceneSetup
         // --- Physics Objects ---
         CreatePhysicsObjects();
 
+        // --- Coffee Cup ---
+        CreateCoffeeCup();
+
         // --- Crosshair UI ---
         CreateCrosshairCanvas();
 
@@ -159,6 +162,14 @@ public static class SceneSetup
             SetColor(obj, color);
             Undo.RegisterCreatedObjectUndo(obj, "Create " + name);
         }
+    }
+
+    private static void CreateCoffeeCup()
+    {
+        if (GameObject.Find("CoffeeCup") != null) return;
+
+        GameObject cup = CoffeeCupGenerator.Create(new Vector3(1f, 0.15f, 0f));
+        Undo.RegisterCreatedObjectUndo(cup, "Create Coffee Cup");
     }
 
     private static void CreateCrosshairCanvas()
