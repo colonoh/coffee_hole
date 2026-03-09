@@ -16,13 +16,19 @@ public static class SceneSetup
         // --- Player ---
         GameObject player = CreatePlayer();
 
+        // --- Game Manager ---
+        CreateGameManager();
+
         // --- Physics Objects ---
         CreatePhysicsObjects();
 
         // --- Coffee Cup ---
         CreateCoffeeCup();
 
-        // --- Crosshair UI ---
+        // --- Scoring Tube ---
+        CreateScoringTube();
+
+        // --- Crosshair UI + Score ---
         CreateCrosshairCanvas();
 
         Debug.Log("MVP scene setup complete! Enter Play mode to test.");
@@ -172,6 +178,54 @@ public static class SceneSetup
         Undo.RegisterCreatedObjectUndo(cup, "Create Coffee Cup");
     }
 
+    private static void CreateGameManager()
+    {
+        if (GameObject.Find("GameManager") != null) return;
+
+        var obj = new GameObject("GameManager");
+        obj.AddComponent<GameManager>();
+        Undo.RegisterCreatedObjectUndo(obj, "Create GameManager");
+    }
+
+    private static void CreateScoringTube()
+    {
+        if (GameObject.Find("ScoringTube") != null) return;
+
+        float innerR = 0.25f;
+        float outerR = 0.30f;
+        float tubeHeight = 0.3f;
+
+        // Tube visual + wall collisions
+        var tube = new GameObject("ScoringTube");
+        tube.transform.position = new Vector3(3f, 0f, 3f);
+
+        var mf = tube.AddComponent<MeshFilter>();
+        var mr = tube.AddComponent<MeshRenderer>();
+        Mesh mesh = ScoringTube.GenerateTubeMesh(tubeHeight, outerR, innerR);
+        mf.sharedMesh = mesh;
+
+        Material mat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+        mat.color = new Color(0.2f, 0.2f, 0.25f);
+        mr.sharedMaterial = mat;
+
+        // Non-convex MeshCollider so tube walls are solid
+        var mc = tube.AddComponent<MeshCollider>();
+        mc.sharedMesh = mesh;
+
+        // Trigger zone inside the tube
+        var trigger = new GameObject("ScoreTrigger");
+        trigger.transform.SetParent(tube.transform, false);
+        trigger.transform.localPosition = new Vector3(0f, tubeHeight * 0.5f, 0f);
+
+        var tc = trigger.AddComponent<BoxCollider>();
+        tc.isTrigger = true;
+        tc.size = new Vector3(innerR * 1.8f, tubeHeight * 0.8f, innerR * 1.8f);
+
+        trigger.AddComponent<ScoringTube>();
+
+        Undo.RegisterCreatedObjectUndo(tube, "Create Scoring Tube");
+    }
+
     private static void CreateCrosshairCanvas()
     {
         if (GameObject.Find("CrosshairCanvas") != null) return;
@@ -183,6 +237,7 @@ public static class SceneSetup
         canvasObj.AddComponent<CanvasScaler>();
         canvasObj.AddComponent<GraphicRaycaster>();
         canvasObj.AddComponent<CrosshairUI>();
+        canvasObj.AddComponent<ScoreUI>();
 
         Undo.RegisterCreatedObjectUndo(canvasObj, "Create Crosshair Canvas");
     }
