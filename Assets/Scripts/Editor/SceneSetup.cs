@@ -36,7 +36,7 @@ public static class SceneSetup
         GameObject floor = GameObject.CreatePrimitive(PrimitiveType.Cube);
         floor.name = "Floor";
         floor.transform.position = new Vector3(0f, -0.5f, 0f);
-        floor.transform.localScale = new Vector3(12f, 1f, 12f);
+        floor.transform.localScale = new Vector3(120f, 1f, 120f);
         floor.isStatic = true;
 
         SetColor(floor, new Color(0.6f, 0.6f, 0.6f));
@@ -45,7 +45,7 @@ public static class SceneSetup
 
     private static void CreateWalls()
     {
-        float roomSize = 12f;
+        float roomSize = 120f;
         float wallHeight = 4f;
         float wallThickness = 0.5f;
         float halfRoom = roomSize / 2f;
