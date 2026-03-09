@@ -28,6 +28,9 @@ public static class SceneSetup
         // --- Scoring Tube ---
         CreateScoringTube();
 
+        // --- Spawn Button ---
+        CreateSpawnButton();
+
         // --- Crosshair UI + Score ---
         CreateCrosshairCanvas();
 
@@ -224,6 +227,33 @@ public static class SceneSetup
         trigger.AddComponent<ScoringTube>();
 
         Undo.RegisterCreatedObjectUndo(tube, "Create Scoring Tube");
+    }
+
+    private static void CreateSpawnButton()
+    {
+        if (GameObject.Find("SpawnButton") != null) return;
+
+        var button = new GameObject("SpawnButton");
+        button.transform.position = new Vector3(-3f, 0f, 0f);
+        button.AddComponent<SpawnButton>();
+
+        // Post (thin tall cylinder)
+        var post = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+        post.name = "Post";
+        post.transform.SetParent(button.transform, false);
+        post.transform.localPosition = new Vector3(0f, 0.45f, 0f);
+        post.transform.localScale = new Vector3(0.08f, 0.45f, 0.08f);
+        SetColor(post, new Color(0.4f, 0.4f, 0.4f));
+
+        // Red button on top
+        var top = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+        top.name = "ButtonTop";
+        top.transform.SetParent(button.transform, false);
+        top.transform.localPosition = new Vector3(0f, 0.94f, 0f);
+        top.transform.localScale = new Vector3(0.2f, 0.04f, 0.2f);
+        SetColor(top, new Color(0.9f, 0.15f, 0.1f));
+
+        Undo.RegisterCreatedObjectUndo(button, "Create Spawn Button");
     }
 
     private static void CreateCrosshairCanvas()

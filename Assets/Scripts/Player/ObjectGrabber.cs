@@ -67,6 +67,12 @@ public class ObjectGrabber : MonoBehaviour
                 rb.linearVelocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;
             }
+            else
+            {
+                // Not grabbable — try interacting instead
+                var interactable = hit.collider.GetComponentInParent<IInteractable>();
+                interactable?.Interact();
+            }
         }
     }
 
