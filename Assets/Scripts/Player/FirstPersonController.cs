@@ -7,6 +7,7 @@ public class FirstPersonController : MonoBehaviour
 {
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float jumpForce = 6f;
     [SerializeField] private float gravity = -15f;
 
     [Header("Look")]
@@ -17,6 +18,7 @@ public class FirstPersonController : MonoBehaviour
     private Transform cameraTransform;
     private InputAction moveAction;
     private InputAction lookAction;
+    private InputAction jumpAction;
 
     private float verticalVelocity;
     private float cameraPitch;
@@ -29,6 +31,7 @@ public class FirstPersonController : MonoBehaviour
         var playerInput = GetComponent<PlayerInput>();
         moveAction = playerInput.actions["Move"];
         lookAction = playerInput.actions["Look"];
+        jumpAction = playerInput.actions["Jump"];
     }
 
     private void Start()
@@ -66,6 +69,9 @@ public class FirstPersonController : MonoBehaviour
 
         if (controller.isGrounded && verticalVelocity < 0f)
             verticalVelocity = -2f; // Small downward force to keep grounded
+
+        if (controller.isGrounded && jumpAction.WasPressedThisFrame())
+            verticalVelocity = jumpForce;
 
         verticalVelocity += gravity * Time.deltaTime;
         move.y = verticalVelocity;
