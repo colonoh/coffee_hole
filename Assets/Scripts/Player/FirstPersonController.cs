@@ -79,6 +79,12 @@ public class FirstPersonController : MonoBehaviour
         controller.Move(move * Time.deltaTime);
     }
 
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        var interactable = hit.collider.GetComponentInParent<IInteractable>();
+        interactable?.Interact();
+    }
+
     private void HandleCursorUnlock()
     {
         if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)

@@ -253,6 +253,17 @@ public static class SceneSetup
         top.transform.localScale = new Vector3(0.2f, 0.04f, 0.2f);
         SetColor(top, new Color(0.9f, 0.15f, 0.1f));
 
+        // Trigger zone sitting on top of the button
+        var trigger = new GameObject("ButtonTrigger");
+        trigger.transform.SetParent(button.transform, false);
+        trigger.transform.localPosition = new Vector3(0f, 1.0f, 0f);
+        var triggerRb = trigger.AddComponent<Rigidbody>();
+        triggerRb.isKinematic = true;
+        var tc = trigger.AddComponent<BoxCollider>();
+        tc.isTrigger = true;
+        tc.size = new Vector3(0.25f, 0.12f, 0.25f);
+        trigger.AddComponent<ButtonTrigger>();
+
         Undo.RegisterCreatedObjectUndo(button, "Create Spawn Button");
     }
 
